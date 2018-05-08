@@ -29,11 +29,11 @@ RSpec.describe UsersController, type: :controller do
   # User. As you add validations to User, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    {email: "joey@joey.com", username: "joey", password_digest: "joey"}
+    {email: "joey@joey.com", username: "joey", password: "joey"}
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {username: "joey"}
   }
 
   # This should return the minimal set of values that should be in the session
@@ -87,7 +87,7 @@ RSpec.describe UsersController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {email: "new@new.com", username: "new", password: "new"}
       }
 
       it "updates the requested user" do
@@ -106,9 +106,9 @@ RSpec.describe UsersController, type: :controller do
       end
     end
 
-    context "with invalid params" do
+    xcontext "with invalid params" do
       it "renders a JSON response with errors for the user" do
-        user = User.create! valid_attributes
+        user = User.create! invalid_attributes
 
         put :update, params: {id: user.to_param, user: invalid_attributes}, session: valid_session
         expect(response).to have_http_status(:unprocessable_entity)
