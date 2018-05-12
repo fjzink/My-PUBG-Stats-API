@@ -5,7 +5,7 @@ class PubgController < ApplicationController
         region = params['region']
         pubg = Pubg.new(region)
         response = pubg.seasons
-        puts response.body
+        render json: response.body
     end
     
     
