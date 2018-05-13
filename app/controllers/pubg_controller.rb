@@ -13,7 +13,14 @@ class PubgController < ApplicationController
         player_name = params['player_name']
         pubg = Pubg.new(region) 
         response = pubg.player(player_name)
-        render json: response.body
+
+        if response["errors"]
+            render json: {"Sorry" => "We couldn't find that player :("}
+        else
+            player_id = response["data"][0]["id"]
+            player_stats = pubg.player_stats(player_id)
+            render json: player_stats.body
+        end
     end
 
     class Pubg
@@ -32,6 +39,10 @@ class PubgController < ApplicationController
         def player(name)
             options = { query: { "filter[playerNames]" => "#{name}" } }
             self.class.get("/#{@region}/players", options)
+        end
+
+        def player_stats(player_id)
+            self.class.get("/#{@region}/players/#{player_id}/seasons/division.bro.official.xb-pre1")
         end
     end
 end
