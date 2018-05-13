@@ -11,6 +11,7 @@ class PubgController < ApplicationController
     def player
         region = params['region']
         player_name = params['player_name']
+        season_id = params["season_id"]
         pubg = Pubg.new(region) 
         response = pubg.player(player_name)
 
@@ -18,7 +19,7 @@ class PubgController < ApplicationController
             render json: {"Sorry" => "We couldn't find that player :("}
         else
             player_id = response["data"][0]["id"]
-            player_stats = pubg.player_stats(player_id)
+            player_stats = pubg.player_stats(player_id, season_id)
             render json: player_stats.body
         end
     end
@@ -41,8 +42,8 @@ class PubgController < ApplicationController
             self.class.get("/#{@region}/players", options)
         end
 
-        def player_stats(player_id)
-            self.class.get("/#{@region}/players/#{player_id}/seasons/division.bro.official.xb-pre1")
+        def player_stats(player_id, season_id)
+            self.class.get("/#{@region}/players/#{player_id}/seasons/#{season_id}")
         end
     end
 end
