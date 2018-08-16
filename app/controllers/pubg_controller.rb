@@ -16,7 +16,7 @@ class PubgController < ApplicationController
         response = pubg.player(player_name)
 
         if response["errors"]
-            render json: {"Sorry" => "We couldn't find that player :("}
+            render status: 404, json: {"message" => "Sorry, that player could not be found."}
         else
             player_id = response["data"][0]["id"]
             player_stats = pubg.player_stats(player_id, season_id)
